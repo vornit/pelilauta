@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fi" xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi">
+<head>
+<meta charset="utf-8"/>
+<title>TIES4080 - Viikkotehtävä 2 - 2022 kesä+syksy</title>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}"></link>
+</head>
+<body>
+
+<h1>Pelilauta</h1>
+
+ <form id="lomake" action="{{request.base_url}}" method="POST" accept-charset="utf-8">
+  <fieldset>
+  <div class="ok">
+  <div class="pelaaja">
+  <p>{{form.laudanKoko.label}}{{ form.laudanKoko }}</p>
+  <p class="virhe">{% for error in form.laudanKoko.errors %} <span>{{ error|e }}</span> {% endfor %}</p>
+  </div>
+  <div class="pelaaja">
+  <p>{{form.pelaaja1.label}}{{ form.pelaaja1 }}</p>
+  <p class="virhe">{% for error in form.pelaaja1.errors %} <span>{{ error|e }}</span> {% endfor %}</p>
+  </div>
+  <div class="pelaaja">
+  <p>{{form.pelaaja2.label}}{{ form.pelaaja2 }}</p>
+  <p class="virhe">{% for error in form.pelaaja2.errors %} <span>{{ error|e }}</span> {% endfor %}</p>
+  </div>
+  </div>
+  <p><input type="submit" name="luoPelilauta"  /></p>
+  </fieldset>
+  </form>
+  
+  <form class="pelilautaForm" action='{{request.base_url}}' method="POST" accept-charset="utf-8">
+  <button type="submit" formaction='?{{"tila=1&"}}{{"tyhjaaHistoria=1&"}}{{"peruEdellinen=0&"}}{{"viimeksiPoistettu="}}{{j}}{{"&"+parametrit}}'>Siirtotila</button>
+  <button type="submit" formaction='?{{"tila=0&"}}{{"tyhjaaHistoria=1&"}}{{"peruEdellinen=0&"}}{{"viimeksiPoistettu="}}{{j}}{{"&"+parametrit}}'>Poistotila</button>
+  <input type="hidden" value="{{lauta_json}}" name="lauta" />
+  {% if poistetut|length > 0 and tila == 0 %}
+  <button class="peruNappi" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"peruEdellinen=1&"}}{{"peruEdellinenSiirto=0&"}}{{"viimeksiPoistettu="}}{{j}}{{"&"+parametrit}}'>Peru edellinen
+  </button>
+  {% endif %}
+  {% if siirtoparit|length > 0 and tila == 1 %}
+  <button class="peruNappi" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"peruEdellinen=0&"}}{{"peruEdellinenSiirto=1&"}}{{"viimeksiPoistettu="}}{{j}}{{"&"+parametrit}}'>Peru edellinen
+  </button>
+  {% endif %}
+  <div class="lauta">
+  {% if p1|length > 0 %}
+  <p class="pelaajanimi">{{p1}}</p>
+  {% endif %}
+  {% if p1|length == 0 %}
+  <p class="pelaajanimi">Pelaaja 1</p>
+  {% endif %}
+  <table class="pelilauta2">
+  {% for j in range(koko*koko) %}
+  {% if pelilauta[j|string]["p"] == 0 %}
+  {% set kuvalinkki = 'https://appro.mit.jyu.fi/ties4080/vt/vt2/blue.svg' %}
+  {% endif %}
+  {% if pelilauta[j|string]["p"] == 1 %}
+  {% set kuvalinkki = 'https://appro.mit.jyu.fi/ties4080/vt/vt2/red.svg' %}
+  {% endif %}
+  {% if pelilauta[j|string]["valittu"] == 1 %}
+  {% set kuvalinkki = 'https://appro.mit.jyu.fi/web-sovellukset/vt/vt2/green.svg' %}
+  {% endif %}
+  {% if j%koko == 0 %}
+  <tr class="ruutu">
+  {% endif %} 
+  {% if pelilauta[j|string]["v"] == 0 %}
+  <td style="background-color:black;width:50px;height: 50px;">
+  {% if valittu is not none and valittu > -1 %}
+  <button style="width:50px;height: 50px;" class="nappula2" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"siirrettava="}}{{j}}{{"&peruEdellinen=0&"}}{{"peruEdellinenSiirto=0&"}}{{"viimeksiPoistettu=-1&"}}{{"&siirrettavanVari="+siirrettavanVari|string}}{{"&siirtokohde="}}{{j}}{{"&"+parametrit}}'>
+  {% endif %}
+  {% if pelilauta[j|string]["a"] == 1 %}
+  <button class="nappula" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"siirrettava="}}{{j}}{{"&peruEdellinen=0&"}}{{"peruEdellinenSiirto=0&"}}{{"viimeksiPoistettu="}}{{j}}{{"&siirrettavanVari="}}{{pelilauta[j|string]["p"]}}{{"&"+parametrit}}'>
+  <img alt="Nappula" src="{{kuvalinkki}}"></img>
+  </button>
+  {% endif %}
+  {% if valittu is not none and valittu > -1 %}</button>{% endif %}</td> 
+  {% endif %}
+  {% if pelilauta[j|string]["v"] == 1 %}
+  <td style="background-color:white;width:50px;height: 50px;">
+  {% if valittu is not none and valittu > -1 %}
+  <button style="width:50px;height: 50px;" class="nappula2" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"siirrettava="+siirrettava|string}}{{"&peruEdellinen=0&"}}{{"peruEdellinenSiirto=0&"}}{{"viimeksiPoistettu=-1&"}}{{"&siirrettavanVari="+siirrettavanVari|string}}{{"&siirtokohde="}}{{j}}{{"&"+parametrit}}'>
+  {% endif %}
+  {% if pelilauta[j|string]["a"] == 1 %}
+  <button class="nappula" type="submit" formaction='?{{"tila="+tila|string+"&"}}{{"siirrettava="+siirrettava|string}}{{"&peruEdellinen=0&"}}{{"peruEdellinenSiirto=0&"}}{{"viimeksiPoistettu="}}{{j}}{{"&siirrettavanVari="}}{{pelilauta[j|string]["p"]}}{{"&"+parametrit}}'>
+  <img alt="Nappula" src="{{kuvalinkki}}"></img>
+  </button>
+  {% endif %}
+  {% if valittu is not none and valittu > -1 %}</button>{% endif %}</td>
+  {% endif %} 
+  {% if j%koko == koko-1 %}
+  </tr>
+  {% endif %} 
+  {% endfor %}
+  </table>
+  {% if p2|length > 0 %}
+  <p class="pelaajanimi">{{p2}}</p>
+  {% endif %}
+  {% if p2|length == 0 %}
+  <p class="pelaajanimi">Pelaaja 2</p>
+  {% endif %}
+  </div>
+  </form>
+
+  {{valittu}}
+
+<!-- Tästä eteenpäin on vain apuvälineenä käytettäviä skriptejä -->
+<!-- HTMLinspectoria käytetään sivun live-muutosten validointiin. Kannattaa
+vielä varmuuden vuoksi ajaa välillä myös W3C:n validaattori -->
+<script src="https://appro.mit.jyu.fi/tools/htmlinspector/html-inspector.js"></script>
+<!-- Sivun validoinnin W3C:n validaattorilla voit tehdä milloin tahansa näppäinyhdistelmällä CTRL+ALT+V -->
+<script src="https://appro.mit.jyu.fi/tools/validator/validator.user.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/xml-validator.js"></script>
+</body>
+</html>

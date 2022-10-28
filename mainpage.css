@@ -1,0 +1,91 @@
+.pelilauta2 {
+  border-spacing: 0;
+  border: 12px;
+  border: 1px solid;
+  margin-top: 5px;
+}
+
+.peruNappi {
+  margin-left: 50px;
+}
+
+.filter-green{
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+.pelilautaForm {
+  margin-top: 20px;
+}
+
+.ruutu {
+  padding: 0; 
+  margin: 0;
+}
+
+.pelaajanimi {
+writing-mode: sideways-lr;
+font-size: 1.5em;
+margin-left: 10px;
+margin-right: 7px;
+font-weight: bold;
+}
+.lauta {
+  display: flex;
+  text-align: center;
+}
+.nappula {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.nappula2 {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  margin-left: -5px;
+}
+
+.ruutunappi {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
+.virhe {
+  color: red;
+  margin-left: 5px;
+  
+}
+.pelaaja {
+  position: relative;
+  display: flex;
+}
+
+p {
+  margin: 5px
+}
+
+.pelaaja>p {
+    display: block;
+    max-width: 100%;
+    width: 21em;
+    position: relative;
+}
+
+#lomake>fieldset>div>div>p>input {
+    float: right; 
+}
+
+form {
+  width: 80em;
+}
